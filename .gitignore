@@ -233,3 +233,8 @@ aider.tags.cache.v3/
 .hermit/
 bin/.hermit/
 .direnv/
+.hermit.env
+.envrc
+
+# AI Agent Guidelines (internal use only)
+AGENTS.md
