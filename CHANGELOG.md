@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1](https://github.com/black0utdev/association-backend/compare/v1.0.0...v1.0.1) (2026-02-03)
+
+
+### Bug Fixes
+
+* **ci:** pin ruff and mypy versions to match requirements.txt ([8f721f1](https://github.com/black0utdev/association-backend/commit/8f721f1c1a70c59d199c6a98330a34037cda0b8d))
+
 ## 1.0.0 (2026-02-03)
 
 
