@@ -10,7 +10,7 @@ from app.domain.entities.user import User
 from app.domain.value_objects.email import Email
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_user_success() -> None:
 	"""Should create user successfully."""
 	# Arrange
@@ -38,7 +38,7 @@ async def test_create_user_success() -> None:
 	mock_repository.save.assert_called_once()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_user_with_existing_email_raises_error() -> None:
 	"""Should raise error when email already exists."""
 	# Arrange
@@ -49,14 +49,14 @@ async def test_create_user_with_existing_email_raises_error() -> None:
 	dto = CreateUserDTO(name="John Doe", email="john@example.com")
 
 	# Act & Assert
-	with pytest.raises(ValueError, match="User with email john@example.com already exists"):
+	with pytest.raises(ValueError, match=r"User with email john@example\.com already exists"):
 		await use_case.execute(dto)
 
 	mock_repository.exists_by_email.assert_called_once_with("john@example.com")
 	mock_repository.save.assert_not_called()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_user_with_invalid_email_raises_error() -> None:
 	"""Should raise error when email is invalid."""
 	# Arrange
@@ -73,7 +73,7 @@ async def test_create_user_with_invalid_email_raises_error() -> None:
 	mock_repository.save.assert_not_called()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_user_with_empty_name_raises_error() -> None:
 	"""Should raise error when name is empty."""
 	# Arrange
