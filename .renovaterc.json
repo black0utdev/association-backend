@@ -1,0 +1,11 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Local Renovate configuration for self-hosted instances",
+  "platform": "github",
+  "username": "renovate[bot]",
+  "gitAuthor": "Renovate Bot <bot@renovateapp.com>",
+  "onboarding": true,
+  "requireConfig": "optional",
+  "repositories": ["yourusername/association-backend"],
+  "includeForks": false
+}

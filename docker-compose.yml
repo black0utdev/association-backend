@@ -1,0 +1,132 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: association-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-association}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      # Persist database data
+      - postgres_data:/var/lib/postgresql/data
+      # Custom initialization scripts
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    ports:
+      # Expose for local development (remove in production)
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-association}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Authelia OAuth2 Provider
+  authelia:
+    image: authelia/authelia:latest
+    container_name: association-authelia
+    restart: unless-stopped
+    environment:
+      AUTHELIA_JWT_SECRET: ${AUTHELIA_JWT_SECRET:?AUTHELIA_JWT_SECRET must be set}
+      AUTHELIA_SESSION_SECRET: ${AUTHELIA_SESSION_SECRET:?AUTHELIA_SESSION_SECRET must be set}
+      AUTHELIA_STORAGE_ENCRYPTION_KEY: ${AUTHELIA_STORAGE_ENCRYPTION_KEY:?AUTHELIA_STORAGE_ENCRYPTION_KEY must be set}
+      AUTHELIA_STORAGE_POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Allow insecure schemes for development
+      AUTHELIA_SERVER_DISABLE_HEALTHCHECK: "false"
+      X_AUTHELIA_CONFIG_FILTERS: "template"
+    volumes:
+      # Mount Authelia configuration
+      - ./config/authelia:/config
+    ports:
+      - "${AUTHELIA_PORT:-9091}:9091"
+    networks:
+      - backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:9091/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # FastAPI Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: association-app
+    restart: unless-stopped
+    environment:
+      # Application settings
+      APP_ENV: ${APP_ENV:-development}
+      DEBUG: ${DEBUG:-false}
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY must be set}
+
+      # Database connection
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-association}
+
+      # Authelia integration
+      AUTHELIA_URL: http://authelia:9091
+      OAUTH2_CLIENT_ID: ${OAUTH2_CLIENT_ID:-association-backend}
+      OAUTH2_CLIENT_SECRET: ${OAUTH2_CLIENT_SECRET:?OAUTH2_CLIENT_SECRET must be set}
+
+      # CORS settings
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
+    volumes:
+      # Mount source code for hot reload in development
+      - ./app:/app/app:ro
+      # Optional: Mount logs directory
+      - ./logs:/app/logs
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    networks:
+      - backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      authelia:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Override CMD for development with hot reload
+    command: >
+      sh -c "
+      if [ \"$$APP_ENV\" = \"development\" ]; then
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      else
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4
+      fi
+      "
+
+networks:
+  backend:
+    driver: bridge
+    name: association-network
+
+volumes:
+  postgres_data:
+    name: association-postgres-data

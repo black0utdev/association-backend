@@ -1,0 +1,65 @@
+---
+###############################################################
+#                   Authelia Configuration                    #
+#          Minimal Development Configuration                  #
+###############################################################
+
+# Server Configuration
+server:
+  address: "tcp://0.0.0.0:9091"
+  disable_healthcheck: false
+
+# Log Configuration
+log:
+  level: debug
+  format: text
+
+# Theme
+theme: light
+
+# TOTP Configuration
+totp:
+  disable: false
+  issuer: association-backend
+
+# Authentication Backend
+authentication_backend:
+  password_reset:
+    disable: false
+  refresh_interval: always
+  file:
+    path: /config/users_database.yml
+
+# Access Control - One factor for development
+access_control:
+  default_policy: one_factor
+
+# Session Configuration - Minimal for development
+session:
+  secret: insecure_session_secret_change_in_production
+  name: authelia_session
+  expiration: 1h
+  inactivity: 15m
+  remember_me_duration: 1M
+  domain: 127.0.0.1
+
+# Storage (PostgreSQL)
+storage:
+  postgres:
+    address: "tcp://postgres:5432"
+    database: authelia
+    username: postgres
+    timeout: 5s
+
+# Notifier (File-based for development)
+notifier:
+  disable_startup_check: true
+  filesystem:
+    filename: /config/notification.txt
+
+# Regulation
+regulation:
+  max_retries: 3
+  find_time: 2m
+  ban_time: 5m
+...

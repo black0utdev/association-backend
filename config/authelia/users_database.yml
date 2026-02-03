@@ -1,0 +1,18 @@
+---
+###############################################################
+#                        User Database                        #
+###############################################################
+# This is a sample file for file-based authentication
+# For production, consider using LDAP or database backend
+
+users:
+  # Generate password hash with: docker run --rm authelia/authelia:latest authelia crypto hash generate argon2 --password 'yourpassword'
+  # Default credentials: admin / admin123 (CHANGE IN PRODUCTION!)
+  admin:
+    displayname: "Admin User"
+    password: "$argon2id$v=19$m=65536,t=3,p=4$Q9TTHP8CELicdews3NGr/g$BINj5TKU3uLZV9jSStIHwTj0yu8YGLTIOS1Uxl1orFY"
+    email: admin@example.com
+    groups:
+      - admins
+      - developers
+...

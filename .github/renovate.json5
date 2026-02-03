@@ -1,0 +1,56 @@
+// Alternative JSON5 format with comments (if you prefer)
+// Rename to renovate.json5 if you want to use this version instead of renovate.json
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	
+	// Base configuration
+	"extends": [
+		"config:recommended",
+		":dependencyDashboard",
+		":semanticCommits",
+		":separateMajorReleases"
+	],
+	
+	// Schedule updates for Monday mornings
+	"schedule": ["before 6am on Monday"],
+	
+	// Rate limiting to avoid overwhelming CI
+	"prConcurrentLimit": 5,
+	"prHourlyLimit": 2,
+	
+	// Auto-merge disabled for safety (enable after project maturity)
+	"automerge": false,
+	
+	// Python dependencies
+	"pip_requirements": {
+		"fileMatch": ["(^|/)requirements.*\\.txt$"]
+	},
+	
+	// Docker Compose
+	"docker-compose": {
+		"fileMatch": ["(^|/)docker-compose[^/]*\\.ya?ml$"]
+	},
+	
+	// Package-specific rules
+	"packageRules": [
+		{
+			"description": "Group all Python dependencies",
+			"matchManagers": ["pip_requirements"],
+			"groupName": "Python dependencies",
+			"stabilityDays": 3
+		},
+		{
+			"description": "Separate major updates",
+			"matchUpdateTypes": ["major"],
+			"groupName": null,
+			"stabilityDays": 7,
+			"labels": ["major-update"]
+		},
+		{
+			"description": "Group Docker images",
+			"matchDatasources": ["docker"],
+			"groupName": "Docker images",
+			"stabilityDays": 7
+		}
+	]
+}

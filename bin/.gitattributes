@@ -1,0 +1,5 @@
+# Hermit binaries
+* binary
+*.hcl text eol=lf
+activate-hermit text eol=lf
+README.md text eol=lf

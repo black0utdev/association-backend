@@ -1,0 +1,205 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases"
+  ],
+  "description": "Renovate configuration for association-backend",
+  "timezone": "Europe/Berlin",
+  "schedule": ["before 6am on Monday"],
+  "labels": ["dependencies", "renovate"],
+  "assignees": [],
+  "reviewers": [],
+  "prConcurrentLimit": 5,
+  "prCreation": "not-pending",
+  "prHourlyLimit": 2,
+  "rebaseWhen": "behind-base-branch",
+  "automerge": false,
+  "platformAutomerge": false,
+  "ignoreDeps": [],
+  "vulnerabilityAlerts": {
+    "labels": ["security", "dependencies"],
+    "assignees": [],
+    "reviewers": []
+  },
+  "packageRules": [
+    {
+      "description": "Python dependencies from requirements.txt",
+      "matchManagers": ["pip_requirements"],
+      "groupName": "Python dependencies",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "schedule": ["before 6am on Monday"],
+      "automerge": false,
+      "stabilityDays": 3,
+      "prPriority": 5
+    },
+    {
+      "description": "Major Python updates (separate PRs)",
+      "matchManagers": ["pip_requirements"],
+      "matchUpdateTypes": ["major"],
+      "groupName": null,
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "automerge": false,
+      "stabilityDays": 7,
+      "prPriority": 3,
+      "labels": ["dependencies", "major-update", "renovate"]
+    },
+    {
+      "description": "FastAPI framework updates",
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": ["fastapi", "uvicorn"],
+      "groupName": "FastAPI framework",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "automerge": false,
+      "stabilityDays": 5,
+      "prPriority": 10,
+      "labels": ["dependencies", "framework", "renovate"]
+    },
+    {
+      "description": "Database dependencies",
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": ["sqlalchemy", "asyncpg", "alembic"],
+      "groupName": "Database dependencies",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "automerge": false,
+      "stabilityDays": 7,
+      "prPriority": 8,
+      "labels": ["dependencies", "database", "renovate"]
+    },
+    {
+      "description": "Security/Auth dependencies",
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": [
+        "python-jose",
+        "passlib",
+        "authlib",
+        "python-multipart"
+      ],
+      "groupName": "Security dependencies",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "automerge": false,
+      "stabilityDays": 7,
+      "prPriority": 9,
+      "labels": ["dependencies", "security", "renovate"]
+    },
+    {
+      "description": "Testing dependencies",
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": ["pytest", "pytest-asyncio", "pytest-cov"],
+      "groupName": "Testing dependencies",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "automerge": false,
+      "stabilityDays": 3,
+      "prPriority": 6,
+      "labels": ["dependencies", "testing", "renovate"]
+    },
+    {
+      "description": "Code quality tools",
+      "matchManagers": ["pip_requirements"],
+      "matchPackageNames": ["ruff", "mypy"],
+      "groupName": "Code quality tools",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "automerge": false,
+      "stabilityDays": 3,
+      "prPriority": 4,
+      "labels": ["dependencies", "tooling", "renovate"]
+    },
+    {
+      "description": "Docker base images",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["python"],
+      "groupName": "Python Docker images",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "docker",
+      "automerge": false,
+      "stabilityDays": 7,
+      "prPriority": 7,
+      "labels": ["dependencies", "docker", "renovate"],
+      "separateMinorPatch": true
+    },
+    {
+      "description": "PostgreSQL Docker images",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["postgres"],
+      "groupName": "PostgreSQL Docker images",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "docker",
+      "automerge": false,
+      "stabilityDays": 14,
+      "prPriority": 8,
+      "labels": ["dependencies", "docker", "database", "renovate"]
+    },
+    {
+      "description": "Authelia Docker images",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["authelia/authelia"],
+      "groupName": "Authelia Docker images",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "docker",
+      "automerge": false,
+      "stabilityDays": 7,
+      "prPriority": 8,
+      "labels": ["dependencies", "docker", "security", "renovate"]
+    },
+    {
+      "description": "GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "ci",
+      "automerge": false,
+      "stabilityDays": 3,
+      "prPriority": 5,
+      "labels": ["dependencies", "github-actions", "renovate"]
+    },
+    {
+      "description": "Pin Docker digests for security",
+      "matchDatasources": ["docker"],
+      "pinDigests": true
+    },
+    {
+      "description": "Security vulnerability patches (auto-merge patch versions)",
+      "matchUpdateTypes": ["patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": false,
+      "stabilityDays": 1,
+      "prPriority": 10,
+      "labels": ["dependencies", "patch", "renovate"]
+    },
+    {
+      "description": "Lock file maintenance",
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "schedule": ["before 6am on the first day of the month"],
+      "automerge": false,
+      "prPriority": 1
+    }
+  ],
+  "pip_requirements": {
+    "fileMatch": ["(^|/)requirements\\.txt$", "(^|/)requirements-.*\\.txt$"]
+  },
+  "docker-compose": {
+    "fileMatch": ["(^|/)docker-compose[^/]*\\.ya?ml$"]
+  },
+  "prBodyDefinitions": {
+    "Notes": "{{#if (or (containsString updateType 'major') (containsString updateType 'minor'))}}⚠️ **Please review changes carefully before merging.**{{/if}}"
+  },
+  "prBodyColumns": ["Package", "Type", "Update", "Change", "Pending"],
+  "prBodyTemplate": "{{{header}}}{{{table}}}{{{notes}}}{{{changelogs}}}{{{configDescription}}}{{{controls}}}{{{footer}}}",
+  "commitMessagePrefix": "",
+  "commitMessageAction": "update",
+  "commitMessageTopic": "{{depName}}",
+  "commitMessageExtra": "to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}v{{{newMajor}}}{{else}}{{#if isSingleVersion}}v{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}{{/if}}{{/if}}",
+  "commitBody": "Renovate automatically updates dependencies to keep the project secure and up-to-date.\n\n{{#if hasReleaseNotes}}**Release notes:** {{{releaseNotes}}}{{/if}}"
+}

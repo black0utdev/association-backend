@@ -1,0 +1,118 @@
+[project]
+name = "association-backend"
+version = "0.1.0"
+description = "Backend API for registered association management"
+authors = [{name = "Your Name", email = "your.email@example.com"}]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "GPL-3.0"}
+
+[tool.ruff]
+# Line length
+line-length = 120
+# Use tabs for indentation
+indent-width = 1
+
+# Target Python 3.12
+target-version = "py312"
+
+[tool.ruff.format]
+# Use tabs instead of spaces
+indent-style = "tab"
+# Quote style
+quote-style = "double"
+# Line endings
+line-ending = "lf"
+
+[tool.ruff.lint]
+# Enable pycodestyle (E), Pyflakes (F), isort (I), and more
+select = [
+	"E",   # pycodestyle errors
+	"W",   # pycodestyle warnings
+	"F",   # pyflakes
+	"I",   # isort
+	"N",   # pep8-naming
+	"UP",  # pyupgrade
+	"B",   # flake8-bugbear
+	"A",   # flake8-builtins
+	"C4",  # flake8-comprehensions
+	"DTZ", # flake8-datetimez
+	"T10", # flake8-debugger
+	"EXE", # flake8-executable
+	"ISC", # flake8-implicit-str-concat
+	"ICN", # flake8-import-conventions
+	"G",   # flake8-logging-format
+	"PIE", # flake8-pie
+	"T20", # flake8-print
+	"PT",  # flake8-pytest-style
+	"Q",   # flake8-quotes
+	"RET", # flake8-return
+	"SIM", # flake8-simplify
+	"TID", # flake8-tidy-imports
+	"ARG", # flake8-unused-arguments
+	"ERA", # eradicate
+	"PL",  # pylint
+	"TRY", # tryceratops
+	"RUF", # ruff-specific rules
+]
+ignore = [
+	"E501",  # Line too long (handled by formatter)
+	"PLR0913", # Too many arguments
+	"TRY003", # Avoid specifying long messages outside exception class
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Unused imports in __init__.py
+"tests/**/*.py" = ["ARG001", "PLR2004"]  # Unused arguments, magic values in tests
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_unimported = false
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+check_untyped_defs = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+addopts = [
+	"--strict-markers",
+	"--strict-config",
+	"--verbose",
+]
+markers = [
+	"unit: Unit tests",
+	"integration: Integration tests",
+	"slow: Slow running tests",
+]
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["tests/*", "venv/*"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+fail_under = 80
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
