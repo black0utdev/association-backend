@@ -3,17 +3,16 @@
 import asyncio
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
-from alembic import context
 
 from app.config import settings
 from app.infrastructure.database import Base
 
 # Import all models here for autogenerate
-# from app.infrastructure.models.user import UserModel
+# from app.infrastructure.models.user import UserModel  # noqa: ERA001
 
 # Alembic Config object
 config = context.config

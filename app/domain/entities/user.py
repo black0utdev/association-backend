@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 
 from app.domain.value_objects.email import Email
 
@@ -13,10 +12,10 @@ class User:
 
 	name: str
 	email: Email
-	id: Optional[int] = None
+	id: int | None = None
 	is_active: bool = True
-	created_at: Optional[datetime] = None
-	updated_at: Optional[datetime] = None
+	created_at: datetime | None = None
+	updated_at: datetime | None = None
 
 	def __post_init__(self) -> None:
 		"""Validate user data after initialization."""
@@ -27,10 +26,10 @@ class User:
 		"""Change user email address.
 
 		Args:
-			new_email: New email address
+		        new_email: New email address
 
 		Raises:
-			ValueError: If email is invalid (handled by Email value object)
+		        ValueError: If email is invalid (handled by Email value object)
 		"""
 		self.email = new_email
 
@@ -46,10 +45,10 @@ class User:
 		"""Update user name.
 
 		Args:
-			new_name: New name for the user
+		        new_name: New name for the user
 
 		Raises:
-			ValueError: If name is empty or whitespace only
+		        ValueError: If name is empty or whitespace only
 		"""
 		if not new_name or not new_name.strip():
 			raise ValueError("Name cannot be empty")

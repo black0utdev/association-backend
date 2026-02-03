@@ -1,7 +1,6 @@
 """SQLAlchemy User model."""
 
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import Boolean, DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
@@ -24,7 +23,7 @@ class UserModel(Base):
 		server_default=func.now(),
 		nullable=False,
 	)
-	updated_at: Mapped[Optional[datetime]] = mapped_column(
+	updated_at: Mapped[datetime | None] = mapped_column(
 		DateTime(timezone=True),
 		onupdate=func.now(),
 		nullable=True,

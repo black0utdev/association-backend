@@ -1,7 +1,8 @@
 """Unit tests for User entity."""
 
+from datetime import UTC, datetime
+
 import pytest
-from datetime import datetime
 
 from app.domain.entities.user import User
 from app.domain.value_objects.email import Email
@@ -26,8 +27,8 @@ def test_create_user_with_valid_data() -> None:
 def test_create_user_with_all_fields() -> None:
 	"""Should create user with all fields."""
 	email = Email("jane.doe@example.com")
-	created_at = datetime(2024, 1, 1, 12, 0, 0)
-	updated_at = datetime(2024, 1, 2, 12, 0, 0)
+	created_at = datetime(2024, 1, 1, 12, 0, 0, tzinfo=UTC)
+	updated_at = datetime(2024, 1, 2, 12, 0, 0, tzinfo=UTC)
 
 	user = User(
 		id=1,

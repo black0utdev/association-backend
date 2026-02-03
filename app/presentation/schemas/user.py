@@ -1,12 +1,10 @@
 """Pydantic schemas for User API requests and responses."""
 
 from datetime import datetime
-from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from app.domain.entities.user import User
-from app.domain.value_objects.email import Email
 
 
 class UserBase(BaseModel):
@@ -19,15 +17,13 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
 	"""Schema for creating a new user."""
 
-	pass
-
 
 class UserUpdate(BaseModel):
 	"""Schema for updating an existing user."""
 
-	name: Optional[str] = Field(None, min_length=1, max_length=255, description="User's full name")
-	email: Optional[EmailStr] = Field(None, description="User's email address")
-	is_active: Optional[bool] = Field(None, description="User's active status")
+	name: str | None = Field(None, min_length=1, max_length=255, description="User's full name")
+	email: EmailStr | None = Field(None, description="User's email address")
+	is_active: bool | None = Field(None, description="User's active status")
 
 
 class UserResponse(UserBase):
@@ -38,17 +34,17 @@ class UserResponse(UserBase):
 	id: int = Field(..., description="User's unique identifier")
 	is_active: bool = Field(..., description="User's active status")
 	created_at: datetime = Field(..., description="User creation timestamp")
-	updated_at: Optional[datetime] = Field(None, description="User last update timestamp")
+	updated_at: datetime | None = Field(None, description="User last update timestamp")
 
 	@classmethod
 	def from_entity(cls, user: User) -> "UserResponse":
 		"""Create UserResponse from domain entity.
 
 		Args:
-			user: User domain entity
+		        user: User domain entity
 
 		Returns:
-			UserResponse instance
+		        UserResponse instance
 		"""
 		return cls(
 			id=user.id,  # type: ignore

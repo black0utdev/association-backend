@@ -1,6 +1,5 @@
 """User repository implementation using SQLAlchemy."""
 
-from typing import List, Optional
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,31 +17,25 @@ class UserRepositoryImpl(UserRepository):
 		"""Initialize repository with database session.
 
 		Args:
-			db: Async database session
+		        db: Async database session
 		"""
 		self.db = db
 
-	async def get_by_id(self, user_id: int) -> Optional[User]:
+	async def get_by_id(self, user_id: int) -> User | None:
 		"""Get user by ID."""
-		result = await self.db.execute(
-			select(UserModel).where(UserModel.id == user_id)
-		)
+		result = await self.db.execute(select(UserModel).where(UserModel.id == user_id))
 		model = result.scalar_one_or_none()
 		return self._to_entity(model) if model else None
 
-	async def get_by_email(self, email: str) -> Optional[User]:
+	async def get_by_email(self, email: str) -> User | None:
 		"""Get user by email address."""
-		result = await self.db.execute(
-			select(UserModel).where(UserModel.email == email)
-		)
+		result = await self.db.execute(select(UserModel).where(UserModel.email == email))
 		model = result.scalar_one_or_none()
 		return self._to_entity(model) if model else None
 
-	async def list_all(self, skip: int = 0, limit: int = 100) -> List[User]:
+	async def list_all(self, skip: int = 0, limit: int = 100) -> list[User]:
 		"""List all users with pagination."""
-		result = await self.db.execute(
-			select(UserModel).offset(skip).limit(limit)
-		)
+		result = await self.db.execute(select(UserModel).offset(skip).limit(limit))
 		models = result.scalars().all()
 		return [self._to_entity(model) for model in models]
 
@@ -54,9 +47,7 @@ class UserRepositoryImpl(UserRepository):
 			self.db.add(model)
 		else:
 			# Update existing user
-			result = await self.db.execute(
-				select(UserModel).where(UserModel.id == user.id)
-			)
+			result = await self.db.execute(select(UserModel).where(UserModel.id == user.id))
 			model = result.scalar_one_or_none()
 			if model is None:
 				raise ValueError(f"User with id {user.id} not found")
@@ -68,9 +59,7 @@ class UserRepositoryImpl(UserRepository):
 
 	async def delete(self, user_id: int) -> bool:
 		"""Delete user by ID."""
-		result = await self.db.execute(
-			select(UserModel).where(UserModel.id == user_id)
-		)
+		result = await self.db.execute(select(UserModel).where(UserModel.id == user_id))
 		model = result.scalar_one_or_none()
 		if model is None:
 			return False
@@ -81,19 +70,17 @@ class UserRepositoryImpl(UserRepository):
 
 	async def exists_by_email(self, email: str) -> bool:
 		"""Check if user exists by email."""
-		result = await self.db.execute(
-			select(UserModel.id).where(UserModel.email == email)
-		)
+		result = await self.db.execute(select(UserModel.id).where(UserModel.email == email))
 		return result.scalar_one_or_none() is not None
 
 	def _to_entity(self, model: UserModel) -> User:
 		"""Convert SQLAlchemy model to domain entity.
 
 		Args:
-			model: SQLAlchemy UserModel
+		        model: SQLAlchemy UserModel
 
 		Returns:
-			User domain entity
+		        User domain entity
 		"""
 		return User(
 			id=model.id,
@@ -108,10 +95,10 @@ class UserRepositoryImpl(UserRepository):
 		"""Convert domain entity to SQLAlchemy model.
 
 		Args:
-			entity: User domain entity
+		        entity: User domain entity
 
 		Returns:
-			SQLAlchemy UserModel
+		        SQLAlchemy UserModel
 		"""
 		return UserModel(
 			id=entity.id,
@@ -126,8 +113,8 @@ class UserRepositoryImpl(UserRepository):
 		"""Update SQLAlchemy model from domain entity.
 
 		Args:
-			model: SQLAlchemy UserModel to update
-			entity: User domain entity with new data
+		        model: SQLAlchemy UserModel to update
+		        entity: User domain entity with new data
 		"""
 		model.name = entity.name
 		model.email = entity.email.value

@@ -56,7 +56,10 @@ select = [
 	"RUF", # ruff-specific rules
 ]
 ignore = [
+	"E101",  # Indentation contains mixed spaces and tabs (formatter issue)
 	"E501",  # Line too long (handled by formatter)
+	"W191",  # Indentation contains tabs (we use tabs intentionally)
+	"ISC001", # Conflicts with formatter
 	"PLR0913", # Too many arguments
 	"TRY003", # Avoid specifying long messages outside exception class
 ]
