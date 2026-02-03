@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1](https://github.com/black0utdev/association-backend/compare/v1.1.0...v1.1.1) (2026-02-03)
+
+
+### Bug Fixes
+
+* **ci:** add security-events permission and upgrade CodeQL to v4 ([70e888d](https://github.com/black0utdev/association-backend/commit/70e888d73d1f1694c0b1a91d055bd78e6db3e7f2))
+
 ## [1.1.0](https://github.com/black0utdev/association-backend/compare/v1.0.2...v1.1.0) (2026-02-03)
 
 
