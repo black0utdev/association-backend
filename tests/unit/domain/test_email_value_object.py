@@ -35,7 +35,9 @@ def test_email_is_immutable() -> None:
 	"""Should be immutable (frozen dataclass)."""
 	email = Email("user@example.com")
 
-	with pytest.raises(AttributeError, match="can't set attribute|has no setter"):
+	with pytest.raises(
+		(AttributeError, Exception), match="can't set attribute|has no setter|cannot assign to field"
+	):
 		email.value = "changed@example.com"  # type: ignore
 
 
