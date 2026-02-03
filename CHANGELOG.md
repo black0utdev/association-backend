@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0](https://github.com/black0utdev/association-backend/compare/v1.0.2...v1.1.0) (2026-02-03)
+
+
+### Features
+
+* **ci:** upgrade ruff to 0.14.14 and fix compatibility issues ([2483cb2](https://github.com/black0utdev/association-backend/commit/2483cb2dd1a86369a8db6d42f89ccd2d0e261723))
+
 ## [1.0.2](https://github.com/black0utdev/association-backend/compare/v1.0.1...v1.0.2) (2026-02-03)
 
 
