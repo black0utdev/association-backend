@@ -205,3 +205,31 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Agentic AI / OpenCode
+# Claude Code / Cursor / AI coding assistants
+.aider*
+.opencode
+.claude/
+.cursor/
+.continue/
+.cline/
+.copilot/
+.github-copilot/
+.gitattributes-ai
+.ai/
+.windsurf/
+aider.tags.cache.v3/
+.aider.chat.history.md
+.aider.input.history
+.aider.tags.cache.v3
+
+# AI-generated artifacts (optional - remove if you want to keep them)
+# *.ai.md
+# *-ai-context.md
+
+# Hermit
+# Hermit binaries are tracked in Git, but environment state is not
+.hermit/
+bin/.hermit/
+.direnv/
